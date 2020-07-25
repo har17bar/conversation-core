@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { UserCredentialDto } from '../dto/user-credential.dto';
+import { UserCredentialDto } from './dto/user-credential.dto';
 
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
