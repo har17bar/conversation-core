@@ -3,9 +3,12 @@ import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as config from 'config';
 
 async function bootstrap() {
-  const PORT = 3300;
+  const serverConfig = config.get('server');
+  const PORT = serverConfig.port;
+
   const logger = new Logger('bootstrap');
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
