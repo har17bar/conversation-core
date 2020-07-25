@@ -6,14 +6,15 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import * as config from 'config';
+import { WsGuard } from './ws.guard';
 
-const wsConfig = config.get('ws');
-console.log(wsConfig);
+const WS_CONFIG_PORT = config.get('ws').port;
 
-@WebSocketGateway(wsConfig.port)
+@WebSocketGateway(WS_CONFIG_PORT)
+@UseGuards(WsGuard)
 export class WsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('Websocket');
@@ -24,7 +25,7 @@ export class WsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayD
   }
 
   afterInit(server: Server) {
-    this.logger.log(`ws listening on port ${wsConfig.port}`);
+    this.logger.log(`ws listening on port ${WS_CONFIG_PORT}`);
   }
 
   handleDisconnect(client) {

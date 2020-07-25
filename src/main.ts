@@ -6,8 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as config from 'config';
 
 async function bootstrap() {
-  const serverConfig = config.get('server');
-  const PORT = serverConfig.port;
+  const SERVER_CONFIG_PORT = config.get('server').port;
 
   const logger = new Logger('bootstrap');
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -23,7 +22,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerOptions);
   SwaggerModule.setup('/docs', app, document);
 
-  await app.listen(PORT);
-  logger.log(`Application listening on port ${PORT}`);
+  await app.listen(SERVER_CONFIG_PORT);
+  logger.log(`Application listening on port ${SERVER_CONFIG_PORT}`);
 }
 bootstrap();

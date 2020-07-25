@@ -1,10 +1,11 @@
 import { Inject, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-
+import * as config from 'config';
 import { UserCredentialDto } from './dto/user-credential.dto';
 
+const JWT_CONFIG_SECRET = process.env.JWT_SECRET || config.get('jwt').secret;
+
 export class AuthService {
-  private readonly logger = new Logger(AuthService.name);
   @Inject()
   private readonly jwtService: JwtService;
 
@@ -25,5 +26,9 @@ export class AuthService {
     return {
       token,
     };
+  }
+
+  verifyToken(token: string) {
+    return this.jwtService.verify(token, JWT_CONFIG_SECRET);
   }
 }
