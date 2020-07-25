@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthResponseDto } from './dto/auth-response.dto';
 import { UserCredentialDto } from './dto/user-credential.dto';
+import { JwtGuard } from '../shared/guards/jwt.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -26,5 +27,12 @@ export class AuthController {
   @Post('/signUp')
   async signUp(@Body() userCredentialDto: UserCredentialDto): Promise<AuthResponseDto> {
     return this.authService.signUp(userCredentialDto);
+  }
+
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
+  @Post('/exampleGuardedRoute')
+  async exampleGuardedRoute(): Promise<boolean> {
+    return true;
   }
 }

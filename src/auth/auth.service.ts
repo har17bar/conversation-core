@@ -1,18 +1,29 @@
-import { Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+
 import { UserCredentialDto } from './dto/user-credential.dto';
 
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
+  @Inject()
+  private readonly jwtService: JwtService;
+
   async signIn(userCredentialDto: UserCredentialDto) {
+    // ToDo add database fetching to validate user
+    const token = this.jwtService.sign({
+      name: userCredentialDto.name,
+    });
     return {
-      token:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+      token,
     };
   }
   async signUp(userCredentialDto: UserCredentialDto) {
+    // ToDo add database storing user
+    const token = this.jwtService.sign({
+      name: userCredentialDto.name,
+    });
     return {
-      token:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+      token,
     };
   }
 }

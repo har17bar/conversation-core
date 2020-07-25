@@ -5,7 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const PORT = 3000;
+  const PORT = 3300;
   const logger = new Logger('bootstrap');
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
