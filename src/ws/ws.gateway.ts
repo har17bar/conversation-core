@@ -18,10 +18,25 @@ export class WsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayD
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('Websocket');
 
+  wsClients = new Map();
+
   @UseGuards(WsGuard)
   @SubscribeMessage('join')
   handleMessage(client: Socket, payload): void {
     this.logger.log(`Client joined ID: ${client.id}`);
+
+    this.wsClients.set(payload.name, client);
+
+    client.emit('message', { user: 'Administration', text: `${payload.name} have a great day` });
+    this.broadcastBesideCurrent(payload.name, 'message', {
+      user: 'Administration',
+      text: `has Joined ${payload.name}`,
+    });
+  }
+
+  @SubscribeMessage('message')
+  sendMessage(client: Socket, payload): void {
+    this.server.emit('message', { user: payload.name, text: payload.message });
   }
 
   afterInit(server: Server) {
@@ -34,5 +49,13 @@ export class WsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayD
 
   handleConnection(client: Socket, args: any[]) {
     this.logger.log(`Client connected ID: ${client.id}`);
+  }
+
+  private broadcastBesideCurrent(userNameCurrent, event, message: any) {
+    this.wsClients.forEach((client, userName) => {
+      if (userNameCurrent !== userName) {
+        client.emit(event, message);
+      }
+    });
   }
 }
