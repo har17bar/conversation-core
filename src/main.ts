@@ -12,7 +12,6 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors(); // setup cors
-
   const swaggerOptions = new DocumentBuilder() // setup swagger
     .setTitle('Conversation')
     .setDescription('The API description')

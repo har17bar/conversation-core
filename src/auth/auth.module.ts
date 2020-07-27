@@ -5,6 +5,7 @@ import * as config from 'config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
+import { MediatorModule } from '../mediator/mediator.module';
 
 const JWT_CONFIG = process.env.JWT_SECRET || config.get('jwt');
 
@@ -17,6 +18,7 @@ const JWT_CONFIG = process.env.JWT_SECRET || config.get('jwt');
         expiresIn: JWT_CONFIG.expiresIn,
       },
     }),
+    MediatorModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

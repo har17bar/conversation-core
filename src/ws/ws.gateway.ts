@@ -14,11 +14,11 @@ import { WsGuard } from './ws.guard';
 const WS_CONFIG_PORT = config.get('ws').port;
 
 @WebSocketGateway(WS_CONFIG_PORT)
-@UseGuards(WsGuard)
 export class WsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('Websocket');
 
+  @UseGuards(WsGuard)
   @SubscribeMessage('join')
   handleMessage(client: Socket, payload): void {
     this.logger.log(`Client joined ID: ${client.id}`);
