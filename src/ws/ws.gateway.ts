@@ -30,7 +30,7 @@ export class WsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayD
     client.emit('message', { user: 'Administration', text: `${payload.name} have a great day` });
     this.broadcastBesideCurrent(payload.name, 'message', {
       user: 'Administration',
-      text: `${payload.name} has Joined`,
+      text: `${payload.name} has joined`,
     });
   }
 
