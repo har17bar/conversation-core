@@ -4,6 +4,7 @@ import { Logger } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as config from 'config';
+import { TimeoutInterceptor } from './timeout.interceptor';
 
 async function bootstrap() {
   const SERVER_CONFIG_PORT = config.get('server').port;
@@ -12,6 +13,9 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors(); // setup cors
+
+  app.useGlobalInterceptors(new TimeoutInterceptor());
+
   const swaggerOptions = new DocumentBuilder() // setup swagger
     .setTitle('Conversation')
     .setDescription('The API description')
